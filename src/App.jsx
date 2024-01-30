@@ -1,23 +1,24 @@
-import { useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import './App.css'
-import AddTodo from './components/AddTodo/AddTodo';
+
 import TodoList from './components/TodoList/TodoList';
 
+import todocontext from './context/todocontext.js';
+import todoReducer from './Reducer/todoReducer.js';
+import AddTodo from './components/AddTodo/AddTodo.jsx';
+
 function App() {
-  const [todos,settodos]=useState([
-    {id:1,text:'todo 1',isFinished:true},
-    {id:2,text:'todo 2',isFinished:true},
-    {id:3,text:'todo 3',isFinished:true}
-  ]);
-  function addTodos(todoText){
-    let nextId=todos.length+1;
-    settodos([...todos,{id:nextId,isFinished:false,text:todoText}])
-  }
+  
+  const {todos,dispatch}=useReducer(todoReducer,[]);
+
+  
 
   return (
     <>
-    <AddTodo addtodos={addTodos}/>
-     <TodoList todos={todos} settodos={settodos}/>
+    <todocontext.Provider value={{todos,dispatch}}>
+    <AddTodo/>
+     <TodoList />
+    </todocontext.Provider>
     </>
   )
 }
